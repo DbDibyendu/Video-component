@@ -18,7 +18,7 @@
 /* --- Standard Includes --- */
 
 #include <iostream> 
-
+#include <bits/stdc++.h> 
 
 /* --- Project Includes --- */
 using namespace std; 
@@ -45,7 +45,8 @@ class Init{
 
     void Initialise_camera(){
 
-    cout<<ListActivecamera();                   // lists all the camera ids available
+    if(ListActiveCamera.empty())
+    cout<<ListActiveCamera();                   // lists all the camera ids available
 
     cin>>c_id;                                      // gets the camera id from user
     
