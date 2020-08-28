@@ -52,7 +52,7 @@ Camera id e.g '/dev/video0'
 
 ### 1. First create a new Virtual Source        
 
-`CreateVirtualSource()`
+`CreateVirtualSource(<virtualsourceID>)` Create a virtual source if there's isn't one or if the user wants to create a new virutal source
 
     string new;
 
@@ -62,20 +62,26 @@ Camera id e.g '/dev/video0'
     
 ### 2. Get list of the Virtual Source Available
 
-`ListVirtualSource()`
+`ListVirtualSource()` Lists all the virual source that are available
 
     cout<<ListVirtualSource();
 
 ### 3. Get the Settings 
-`ReadVirtualSourceSettings(<virtualsourceID)`
+`ReadVirtualSourceSettings(<virtualsourceID)` prints out the Virtual Source settings of the given virtualsource given by user
 
-    cin>> id;
+    cin>> id;                           // input by user
     cout<<ReadVirtualSourceSettings(id);
     
 ### 4. Initialise the Virtual Source
 
-`InitVirtualSource(<virtualsourceID>)`
+`InitVirtualSource(<virtualsourceID>)` returns 0 or 1 depending upon successful compilation     
+Implementation:
 
-    InitVirtualSource(id);
+    if(InitCamera(id)){
+    cout<<"Camera is successfully initialised"<<endl;
+    }
+    else 
+    cout <<"Error in initialising the camera";
+
 
     
