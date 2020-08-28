@@ -45,7 +45,7 @@ class Init{
 
     void Initialise_camera(){
 
-    cout<<ListActivecamera();                   // lists all the camera ids available
+    cout<<ListActiveCamera();                   // lists all the camera ids available
 
     cin>>c_id;                                      // gets the camera id from user
     
