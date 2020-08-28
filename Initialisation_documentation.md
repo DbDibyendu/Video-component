@@ -18,15 +18,17 @@
 
 # A. Camera Initialisation
 
-### 1. First get the list of cameras present
+### 1. First get the list of cameras present     
 
-    // get the list of camera ids
+`ListActiveCamera()`
+
+    // get the list of camera IDs
     cout<< ListActiveCamera();
     
     
 ### 2. Read the Camera settings by camera ID
 
-Take the ID from the user and call `ReadCameraSettings()` for giving the user
+Take the ID from the user and call `ReadCameraSettings(<cameraID)` for giving the user
 description about the camera
 
 Camera id e.g '/dev/video0'
@@ -38,7 +40,7 @@ Camera id e.g '/dev/video0'
     
 ## 3. Initialise the following Camera
 
-`InitCamera()` will return 0 or 1 depending upon the operations is successful or not
+`InitCamera(<cameraID)` will return 0 or 1 depending upon the operations is successful or not
 
     if(InitCamera(id)){
         cout<<"Camera is successfully initialised"<<endl;
@@ -48,5 +50,38 @@ Camera id e.g '/dev/video0'
 
 # B. Virtual Source Initialisation
 
-### 1. First create a new Virtual Source
+### 1. First create a new Virtual Source        
 
+`CreateVirtualSource(<virtualsourceID>)` Create a virtual source if there's isn't one or if the user wants to create a new virutal source
+
+    string new;
+
+    cin>>new;                               // getting new virtual source name from the user
+        
+    CreateVirtualSource(new);                   // creating a new virtual source using the API
+    
+### 2. Get list of the Virtual Source Available
+
+`ListVirtualSource()` Lists all the virual source that are available
+
+    cout<<ListVirtualSource();
+
+### 3. Get the Settings 
+`ReadVirtualSourceSettings(<virtualsourceID)` prints out the Virtual Source settings of the given virtualsource given by user
+
+    cin>> id;                           // input by user
+    cout<<ReadVirtualSourceSettings(id);
+    
+### 4. Initialise the Virtual Source
+
+`InitVirtualSource(<virtualsourceID>)` returns 0 or 1 depending upon successful compilation     
+Implementation:
+
+    if(InitCamera(id)){
+    cout<<"Camera is successfully initialised"<<endl;
+    }
+    else 
+    cout <<"Error in initialising the camera";
+
+
+    
