@@ -1,3 +1,17 @@
+# Some Basic shell commands to check the list of available device
+
+To list all video devices picked up by the kernel
+
+    ls -ltrh /dev/video*
+    
+OR        
+    
+    v4l2-ctl --list-devices  
+
+To list all devices attached to USB use         
+    
+    lsusb
+
 # Flowchart of each given APIs
    
 1.   `ListActiveCamera`        
