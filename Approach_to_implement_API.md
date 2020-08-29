@@ -1,5 +1,4 @@
-# Some Basic shell commands to check the list of available device
-
+# Some Basic shell commands to check the list of available device Manually
 To list all video devices picked up by the kernel
 
     ls -ltrh /dev/video*
