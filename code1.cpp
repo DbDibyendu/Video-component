@@ -1,8 +1,8 @@
 /**
 * @file code1.cpp
 * @brief 
-
-
+*
+*
 */
 
 /* --- Standard Includes --- */
@@ -84,27 +84,26 @@ int8_t loadJsonConfig()
     return ret;
 }
 
+// creating a structure for capturing image and saving it into file
+
 struct Initialise{
-    int fd;
+    int fd = open("/dev/video0",O_RDWR);
     v4l2_buffer bufferinfo;
     v4l2_buffer queryBuffer;
     v4l2_format imageFormat;
 
 };
 
-int Capture_Image(struct Initialise device){
-
-
+int Open_Device(struct Initialise device){
 
     // 1.  Open the device
 
-    device.fd = open("/dev/video0",O_RDWR);
     if(device.fd < 0){
         perror("Failed to open device, OPEN");
         return 1;
     }
 
-        // 2. Ask the device if it can capture frames
+    // 2. Ask the device if it can capture frames
     v4l2_capability capability;
     if(ioctl(device.fd, VIDIOC_QUERYCAP, &capability) < 0){
         // something went wrong... exit
@@ -112,16 +111,20 @@ int Capture_Image(struct Initialise device){
         return 1;
     }
 
+}
+
+int CaptureImage_SaveIntoMemory(struct Initialise device){
+
     // 3. Set Image format
-   
-    device.imageFormat.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    device.imageFormat.fmt.pix.width = 1024;
-    device.imageFormat.fmt.pix.height = 1024;
-    device.imageFormat.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
-    device.imageFormat.fmt.pix.field = V4L2_FIELD_NONE;
+    v4l2_format imageFormat={0};
+    imageFormat.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    imageFormat.fmt.pix.width = 1024;
+    imageFormat.fmt.pix.height = 1024;
+    imageFormat.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
+    imageFormat.fmt.pix.field = V4L2_FIELD_NONE;
     
     // tell the device you are using this format
-    if(ioctl(device.fd, VIDIOC_S_FMT, &device.imageFormat) < 0){
+    if(ioctl(device.fd, VIDIOC_S_FMT, &imageFormat) < 0){
         perror("Device could not set format, VIDIOC_S_FMT");
         return 1;
     }
@@ -140,7 +143,7 @@ int Capture_Image(struct Initialise device){
 
     // 5. Quety the buffer to get raw data ie. ask for the you requested buffer
     // and allocate memory for it
-   // v4l2_buffer queryBuffer = {0};
+
     device.queryBuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     device.queryBuffer.memory = V4L2_MEMORY_MMAP;
     device.queryBuffer.index = 0;
@@ -155,6 +158,7 @@ int Capture_Image(struct Initialise device){
                         device.fd, device.queryBuffer.m.offset);
     memset(buffer, 0, device.queryBuffer.length);
 
+    
     // 6. Get a frame
     // Create a new buffer type so the device knows whichbuffer we are talking about
 
@@ -170,6 +174,8 @@ int Capture_Image(struct Initialise device){
         perror("Could not start streaming, VIDIOC_STREAMON");
         return 1;
     }
+
+
 
 /***************************** Begin looping here *********************/
     // Queue the buffer
@@ -187,6 +193,7 @@ int Capture_Image(struct Initialise device){
 
     cout << "Buffer has: " << (double)device.bufferinfo.bytesused / 1024
             << " KBytes of data" << endl;
+
 
     // Write the data out to file
     v4l2_buffer bufferinfo;
@@ -224,7 +231,7 @@ int Capture_Image(struct Initialise device){
         remainingBufferSize -= outFileMemBlockSize;
 
         // display the remaining buffer size
-     //   cout << itr++ << " Remaining bytes: "<< remainingBufferSize << endl;
+      //   cout << itr++ << " Remaining bytes: "<< remainingBufferSize << endl;
         
         delete outFileMemBlock;
 
@@ -232,10 +239,12 @@ int Capture_Image(struct Initialise device){
 
     // Close the file
     outFile.close();
+}
 
+int End_Streaming(struct Initialise device){
 
     // end streaming
-     if(ioctl(device.fd, VIDIOC_STREAMOFF, &type) < 0){
+     if(ioctl(device.fd, VIDIOC_STREAMOFF, &device.bufferinfo.type) < 0){
          perror("Could not end streaming, VIDIOC_STREAMOFF");
           return 1;
           }
@@ -248,14 +257,25 @@ int Capture_Image(struct Initialise device){
 
 int main() {
 
-     struct Initialise device1;
+    struct Initialise device1;
 
     // loads the json in file in config global variable
-    loadJsonConfig();
+  //  loadJsonConfig();
+
 
     // initialises camera
    
-    Capture_Image(device1);  
+    Open_Device(device1); 
+
+    // Capture image and save it into file memory
+
+    CaptureImage_SaveIntoMemory(device1);
+
+    // End the streaming
+
+    End_Streaming(device1);
+
+
     
     return 0;
 }
