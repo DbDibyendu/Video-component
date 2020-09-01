@@ -1,0 +1,29 @@
+{
+  "wireless": {
+    "device":"on",
+    "status": "on",
+    "ssid": "Hegde-Jio",
+    "password": "secretpassword"
+  },
+  "ethernet": [
+        {
+          "device": "eth0",
+          "status": "on",
+          "allocation": "static",
+          "ipAddress": "192.168.0.100",
+          "subnetMask": "255.255.255.0",
+          "routerAddress": "192.168.0.1"
+        },
+        {
+          "device": "eth1",
+          "status": "on",
+          "allocation": "dhcp",
+          "ipAddress": null,
+          "subnetMask": null,
+          "routerAddress": null
+        }  
+        
+    ],
+    "hostname": "raspberrypi",
+    "timezone": "Asia/Kolkata"
+}
