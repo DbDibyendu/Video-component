@@ -1,7 +1,8 @@
 /**
-* @file parse_json.cpp
-* @brief Contians functions used for parsing and retrieveing settings when the
-*        API calls for it.
+* @file code1.cpp
+* @brief 
+
+
 */
 
 /* --- Standard Includes --- */
@@ -247,8 +248,13 @@ int Capture_Image(struct Initialise device){
 
 int main() {
 
-    struct Initialise device1;
+     struct Initialise device1;
 
+    // loads the json in file in config global variable
+    loadJsonConfig();
+
+    // initialises camera
+   
     Capture_Image(device1);  
     
     return 0;
