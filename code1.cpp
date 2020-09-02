@@ -51,8 +51,7 @@ using namespace std;
 
 /* Declare a JSON document. JSON document parsed will be stored in this variable */
 static Document config;
-
-// char loc[100];
+;
 
 /*
  * @brief Parse and store JSON document into global variable
@@ -91,13 +90,12 @@ int8_t loadJsonConfig()
 }
 
 
-
 // creating a structure for capturing image and saving it into file
 
 struct Initialise{
     
-    char loc[100];
-    int fd;
+    char loc[100];                                  // stores the device location
+    int fd;                                         
     v4l2_buffer bufferinfo;
     v4l2_buffer queryBuffer;
     v4l2_format imageFormat;
@@ -270,12 +268,13 @@ int CaptureFrametoMem(struct Initialise device){
 
 int main() {
 
-    struct Initialise device1;
+    struct Initialise device1;                  // creates a new object device1
 
     int k;
     char device_id[100];
 
     // loads the json in file in config global variable
+    
     loadJsonConfig();
     
     cout<<"Choose from Devices:\n { 0 , 1 , 2 , 3 }"<<endl;
@@ -294,12 +293,15 @@ int main() {
 
     strcpy(device1.loc,DeviceID.GetString());                   // copying the device id in device1.loc
 
-        /* Print the string value */
+     /* Print the string value */
     cout <<"Device ID = " << DeviceID.GetString() << std::endl;
 
 
+    // Read Camera settings from kernel
+
     ReadCameraSettings(device1);
-    // initialises camera
+    
+    // Captures frame and save it into memory
    
     CaptureFrametoMem(device1); 
 
