@@ -39,7 +39,7 @@
 #include <tsanalyser/tsanalyser.h>
 
 
-#define SI_CONFIG_FILE "example.json"
+#define SI_CONFIG_FILE "config.json"
 #define JSON_MAX_READ_BUF_SIZE 65536
 
 using namespace rapidjson;
@@ -47,6 +47,8 @@ using namespace std;
 
 /* Declare a JSON document. JSON document parsed will be stored in this variable */
 static Document config;
+
+// char loc[100];
 
 /*
  * @brief Parse and store JSON document into global variable
@@ -69,35 +71,49 @@ int8_t loadJsonConfig()
         ParseResult ok = config.ParseStream(frstream);
 
         if (!ok) {
-            fprintf(stderr, "Error Reading JSON config file: JSON parse error: %s \n",GetParseError_En(ok.Code()));
+            fprintf(stderr, "Error Reading JSON config file: JSON parse error: %s (%u)",
+                    GetParseError_En(ok.Code()), ok.Offset());
         }
 
         ret = 0;
 
     } else {
-        fprintf(stderr,"Error Reading JSON config file: %s \n", strerror(errno));
+        fprintf(stderr,"Error Reading JSON config file: %s", strerror(errno));
     }
-    
+
     /* Close the example.json file*/
     fclose(fp);
-
     return ret;
 }
+
+
 
 // creating a structure for capturing image and saving it into file
 
 struct Initialise{
-    int fd = open("/dev/video0",O_RDWR);
+    
+    char loc[100];
+    int fd;
     v4l2_buffer bufferinfo;
     v4l2_buffer queryBuffer;
     v4l2_format imageFormat;
 
 };
 
-int Open_Device(struct Initialise device){
+int ReadCameraSettings(struct Initialise device){
+
+    char command[100]={0};
+    strcpy(command,"sudo v4l2-ctl --device=");
+    strcat(command,device.loc);
+    strcat(command," --all");
+    system(command);
+
+}
+
+int CaptureFrametoMem(struct Initialise device){
 
     // 1.  Open the device
-
+    device.fd = open(device.loc,O_RDWR);
     if(device.fd < 0){
         perror("Failed to open device, OPEN");
         return 1;
@@ -110,10 +126,6 @@ int Open_Device(struct Initialise device){
         perror("Failed to get device capabilities, VIDIOC_QUERYCAP");
         return 1;
     }
-
-}
-
-int CaptureImage_SaveIntoMemory(struct Initialise device){
 
     // 3. Set Image format
     v4l2_format imageFormat={0};
@@ -239,9 +251,6 @@ int CaptureImage_SaveIntoMemory(struct Initialise device){
 
     // Close the file
     outFile.close();
-}
-
-int End_Streaming(struct Initialise device){
 
     // end streaming
      if(ioctl(device.fd, VIDIOC_STREAMOFF, &device.bufferinfo.type) < 0){
@@ -259,22 +268,36 @@ int main() {
 
     struct Initialise device1;
 
+    int k;
+    char device_id[100];
+
     // loads the json in file in config global variable
-  //  loadJsonConfig();
+    loadJsonConfig();
+    
+    cout<<"Choose from Devices:\n { 0 , 1 , 2 , 3 }"<<endl;
+    cin>>k;
+
+    if(k==0) strcpy(device_id,"device0");
+    else if(k==1) strcpy(device_id,"device1");
+    else if(k==2) strcpy(device_id,"device2");
+    else if(k==3) strcpy(device_id,"device3");
+    else {
+    printf("Error, Enter a valid number \n");
+    return -1;
+    }
+      
+    Value& DeviceID = config[device_id]["loc"];
+
+    strcpy(device1.loc,DeviceID.GetString());                   // copying the device id in device1.loc
+
+        /* Print the string value */
+    cout <<"Device ID = " << DeviceID.GetString() << std::endl;
 
 
+    ReadCameraSettings(device1);
     // initialises camera
    
-    Open_Device(device1); 
-
-    // Capture image and save it into file memory
-
-    CaptureImage_SaveIntoMemory(device1);
-
-    // End the streaming
-
-    End_Streaming(device1);
-
+    CaptureFrametoMem(device1); 
 
     
     return 0;
