@@ -6,12 +6,14 @@
 */
 
 /* --- Standard Includes --- */
+
 #include <fstream>
 #include <cstdlib>
 #include <string>
 #include <errno.h>
 
 /* --- include/rapidjson Includes --- */
+
 #include "include/rapidjson/document.h"
 #include "include/rapidjson/writer.h"
 #include "include/rapidjson/istreamwrapper.h"
@@ -20,7 +22,9 @@
 #include "include/rapidjson/filereadstream.h"
 #include "include/rapidjson/error/en.h"
 
+
 /* --- Project Includes --- */
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
