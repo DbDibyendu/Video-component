@@ -1,6 +1,6 @@
 # Documentation for code1.cpp
 
-### psuedo codes for the functions
+### Psuedo codes and flowcharts for the functions
 
 ##### 1. `loadJsonConfig()`
 
@@ -34,7 +34,7 @@ This function Parse and store JSON document into global variable
 
 ##### 2. `ReadCameraSettings()`
 
-This functions Prints out the Settings of the device entered by user which is stored in the respective Object in the main function
+This function Prints out the Settings of the device entered by user which is stored in the respective Object in the main function
 
     
         Declare a character command to store the System command
@@ -49,9 +49,13 @@ This functions Prints out the Settings of the device entered by user which is st
         
 
 
-##### 3. CaptureFrametoMem()
+##### 3. `CaptureFrametoMem()`
 
+This function Starts the following device and captures a frame and store it into Memory
+    
+    
 
 ### Info about the config.json file
 
 It contains Multiple device and their basic Settings in Json format
+
