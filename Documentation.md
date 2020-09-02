@@ -2,7 +2,7 @@
 
 ### psuedo codes for the functions
 
-##### 1. loadJsonConfig()
+##### 1. `loadJsonConfig()`
 
 This function Parse and store JSON document into global variable
 
@@ -32,7 +32,21 @@ This function Parse and store JSON document into global variable
         return -1 
         
 
-##### 2. ReadCameraSettings()
+##### 2. `ReadCameraSettings()`
+
+This functions Prints out the Settings of the device entered by user which is stored in the respective Object in the main function
+
+    
+        Declare a character command to store the System command
+        
+        Copy the initial part "sudo v4l2-ctl --device=" into it
+        
+        Add the device location given by user from "device.loc" present in the Object 
+        
+        Then Add the rest of the command
+        
+        Use System(command) to run the system command which prints out the device settings
+        
 
 
 ##### 3. CaptureFrametoMem()
