@@ -2,7 +2,7 @@
 * @file code1.cpp
 * @brief 
 *
-*
+*@author Dibyendu Biswas
 */
 
 /* --- Standard Includes --- */
@@ -25,6 +25,7 @@
 
 /* --- Project Includes --- */
 
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +42,16 @@
 #include <fstream>
 #include <string>
 #include <tsanalyser/tsanalyser.h>
+#include <assert.h>
+#include <getopt.h>             /* getopt_long() */
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <linux/videodev2.h>
 
+#include <linux/videodev.h>
+#include <glob.h>
+#include <unistd.h>
 
 #define SI_CONFIG_FILE "config.json"
 #define JSON_MAX_READ_BUF_SIZE 65536
@@ -71,17 +81,18 @@ int8_t loadJsonConfig()
         FileReadStream frstream(fp, readBuffer, sizeof(readBuffer));
         /* Parse example.json and store it in `d` */
         config.ParseStream(frstream);
+        
         ParseResult ok = config.ParseStream(frstream);
 
         if (!ok) {
-            fprintf(stderr, "Error Reading JSON config file: JSON parse error: %s (%u)",
+            fprintf(stderr, "Error Reading JSON config file: JSON parse error: %s (%u)\n",
                     GetParseError_En(ok.Code()), ok.Offset());
         }
 
         ret = 0;
 
     } else {
-        fprintf(stderr,"Error Reading JSON config file: %s", strerror(errno));
+        fprintf(stderr,"Error Reading JSON config file: %s\n", strerror(errno));
     }
 
     /* Close the example.json file*/
@@ -89,6 +100,21 @@ int8_t loadJsonConfig()
     return ret;
 }
 
+
+void ListActiveCameras() {
+  int i;
+  glob_t globbuf;
+  if (glob("/dev/v4l/by-path/*", 0, NULL, &globbuf) != 0) {
+    perror("glob");
+    return;
+  }
+  for (i=0; i < globbuf.gl_pathc; i++) {
+    char buf[256] = {};
+    if (readlink(globbuf.gl_pathv[i], buf, sizeof(buf)-1) > 0) {
+      puts(buf);
+    }
+  }
+}
 
 // creating a structure for capturing image and saving it into file
 
@@ -102,16 +128,43 @@ struct Initialise{
 
 };
 
+// Reads the respective Camera settings 
 int ReadCameraSettings(struct Initialise device){
+     
 
-    char command[100]={0};
-    strcpy(command,"sudo v4l2-ctl --device=");
-    strcat(command,device.loc);
-    strcat(command," --all");
-    system(command);
+    struct video_capability video_cap;
+    struct video_window     video_win;
+    struct video_picture   video_pic;
+
+    if((device.fd = open(device.loc, O_RDONLY)) == -1){
+        perror("cam_info: Can't open device");
+        return 1;
+    }
+
+    if(ioctl(device.fd, VIDIOCGCAP, &video_cap) == -1)
+        perror("cam_info: Can't get capabilities");
+    else {
+        printf("Name:\t\t '%s'\n", video_cap.name);
+        printf("Minimum size:\t%d x %d\n", video_cap.minwidth, video_cap.minheight);
+        printf("Maximum size:\t%d x %d\n", video_cap.maxwidth, video_cap.maxheight);
+    }
+
+    if(ioctl(device.fd, VIDIOCGWIN, &video_win) == -1)
+        perror("cam_info: Can't get window information");
+    else
+        printf("Current size:\t%d x %d\n", video_win.width, video_win.height);
+
+    if(ioctl(device.fd, VIDIOCGPICT, &video_pic) == -1)
+        perror("cam_info: Can't get picture information");
+    else
+        printf("Current depth:\t%d\n", video_pic.depth);
+
+    close(device.fd);
+    return 0;
 
 }
 
+// Take image and save it into memory
 int CaptureFrametoMem(struct Initialise device){
 
     // 1.  Open the device
@@ -276,8 +329,14 @@ int main() {
     // loads the json in file in config global variable
     
     loadJsonConfig();
+
+    cout<<"Number of cameras available: \n";
+
+    // prints out all the active devices
     
-    cout<<"Choose from Devices:\n { 0 , 1 , 2 , 3 }"<<endl;
+    ListActiveCameras();
+    
+    cout<<"\nChoose from Devices:\n { 0 , 1 , 2 , 3 }"<<endl;
     cin>>k;
 
     if(k==0) strcpy(device_id,"device0");
