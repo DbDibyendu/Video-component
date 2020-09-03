@@ -46,7 +46,13 @@ This function Parse and store JSON document into global variable
         end
         
 
-##### 2. `ReadCameraSettings()`
+##### 2. `ListActiveCamera()`
+
+This Function Prints out all the available device
+
+###### Flowchart
+
+##### 3. `ReadCameraSettings()`
 
 This function Prints out the Settings of the device entered by user which is stored in the respective Object in the main function
 
