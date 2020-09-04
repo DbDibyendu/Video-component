@@ -59,8 +59,6 @@ int main() {
     int k;                                      // Integer to store the choice of device for the user
     char device_id[100];                        // char to store the device id
 
-    loadJsonConfig();
-
     cout<<"Number of cameras available: \n";
 
     if(ListActiveCameras()==0){                                       //  Checks if device is present or not Prints and proceed on success else Abort

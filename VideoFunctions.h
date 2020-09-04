@@ -1,18 +1,8 @@
 
-
 /*! Include Guard */
-#ifndef __PARSE_CONF_H__
-#define __PARSE_CONF_H__
+#ifndef CAMERA_H
+#define CAMERA__H
 
-
-
-/*
- *#####################################################################
- *  Process block
- *  -------------
- *  Solve all your problems here 
- *#####################################################################
- */
 #include <stdint.h>
 #include <fstream>
 #include <cstdlib>

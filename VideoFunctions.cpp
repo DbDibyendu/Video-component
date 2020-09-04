@@ -37,7 +37,6 @@
 #include "include/rapidjson/filereadstream.h"
 #include "include/rapidjson/error/en.h"
 
-
 /* --- Project Includes --- */
 
 #include <iostream>
@@ -65,8 +64,6 @@
 #include <linux/videodev.h>
 #include <glob.h>
 #include <unistd.h>
-
-
 
 #define SI_CONFIG_FILE "config.json"
 #define JSON_MAX_READ_BUF_SIZE 65536
@@ -124,8 +121,6 @@ int8_t loadJsonConfig()
     return ret;
 }
 
-
-
 /** 
  *  @brief List all the active cameras present
  *  
@@ -149,24 +144,11 @@ int ListActiveCameras() {
 }
 
 
-// creating a structure for capturing image and saving it into file
-
-struct initCapture{
-    
-    char loc[100];                                  // stores the device location
-    int fd;                                         
-    v4l2_buffer bufferinfo;
-    v4l2_buffer queryBuffer;
-    v4l2_format imageFormat;
-
-};
-
 /** 
  *  @brief Reads the respective Camera settings of a particular device
  *  
  *  @return -1 on failure and 0 on success 
  */
-
 int ReadCameraSettings(struct initCapture device){
      
 
@@ -201,7 +183,6 @@ int ReadCameraSettings(struct initCapture device){
     return 0;
 
 }
-
 
 /** 
  *  @brief  Capture Image and save it into memory
