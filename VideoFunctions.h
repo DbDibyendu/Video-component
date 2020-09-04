@@ -1,7 +1,7 @@
 
 /*! Include Guard */
 #ifndef CAMERA_H
-#define CAMERA__H
+#define CAMERA_H
 
 #include <stdint.h>
 #include <fstream>
@@ -95,7 +95,6 @@ int ReadCameraSettings(struct initCapture device);
  *
  *  @return 0 on success and 1 on failure
  */
-
 
  int CaptureFrametoMem(struct initCapture device);
 
