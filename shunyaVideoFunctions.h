@@ -1,9 +1,23 @@
 /**
-* @file code1.cpp
+* @file shunyaVideoFunctions.h
 * @brief 
+* Contains all the functions for Camera Initialisation, load JSON config
+* and Capture Frame
 *
-*@author Dibyendu Biswas
+* @author Dibyendu Biswas
+* @bug No bugs from my side
 */
+
+/*
+ *#####################################################################
+ *  Initialization block
+ *  ---------------------
+ *  This block contains initialization code for this particular file.
+ *  It typically contains Includes, constants or global variables used
+ *  throughout the file.
+ *#####################################################################
+ */
+
 
 /* --- Standard Includes --- */
 
@@ -24,7 +38,6 @@
 
 
 /* --- Project Includes --- */
-
 
 #include <iostream>
 #include <stdio.h>
@@ -59,15 +72,25 @@
 using namespace rapidjson;
 using namespace std;
 
+/*
+ *#####################################################################
+ *  Process block
+ *  -------------
+ *  Solve all your problems here 
+ *#####################################################################
+ */
+
+
 /* Declare a JSON document. JSON document parsed will be stored in this variable */
 static Document config;
-;
 
-/*
+/**
  * @brief Parse and store JSON document into global variable
  *
  * @return int8_t 0 on SUCCESS and -1 on FAILURE
+ * 
  */
+
 int8_t loadJsonConfig()
 {
     int8_t ret = -1;
@@ -97,16 +120,23 @@ int8_t loadJsonConfig()
 
     /* Close the example.json file*/
     fclose(fp);
+
+    /* Return the 0 on success and -1 on failure */
     return ret;
 }
 
+/** 
+ *  @brief List all the active cameras present
+ *  
+ *  @return -1 If device is not found and else 0 on Success
+ */
 
-void ListActiveCameras() {
+int ListActiveCameras() {
   int i;
   glob_t globbuf;
   if (glob("/dev/v4l/by-path/*", 0, NULL, &globbuf) != 0) {
     perror("glob");
-    return;
+    return -1;
   }
   for (i=0; i < globbuf.gl_pathc; i++) {
     char buf[256] = {};
@@ -114,11 +144,13 @@ void ListActiveCameras() {
       puts(buf);
     }
   }
+  return 0;
 }
+
 
 // creating a structure for capturing image and saving it into file
 
-struct Initialise{
+struct initCapture{
     
     char loc[100];                                  // stores the device location
     int fd;                                         
@@ -128,8 +160,13 @@ struct Initialise{
 
 };
 
-// Reads the respective Camera settings 
-int ReadCameraSettings(struct Initialise device){
+/** 
+ *  @brief Reads the respective Camera settings of a particular device
+ *  
+ *  @return -1 on failure and 0 on success 
+ */
+
+int ReadCameraSettings(struct initCapture device){
      
 
     struct video_capability video_cap;
@@ -138,7 +175,7 @@ int ReadCameraSettings(struct Initialise device){
 
     if((device.fd = open(device.loc, O_RDONLY)) == -1){
         perror("cam_info: Can't open device");
-        return 1;
+        return -1;
     }
 
     if(ioctl(device.fd, VIDIOCGCAP, &video_cap) == -1)
@@ -164,8 +201,15 @@ int ReadCameraSettings(struct Initialise device){
 
 }
 
-// Take image and save it into memory
-int CaptureFrametoMem(struct Initialise device){
+
+/** 
+ *  @brief  Capture Image and save it into memory
+ *  
+ *
+ *  @return 0 on success and 1 on failure
+ */
+
+int CaptureFrametoMem(struct initCapture device){
 
     // 1.  Open the device
     device.fd = open(device.loc,O_RDWR);
@@ -319,53 +363,6 @@ int CaptureFrametoMem(struct Initialise device){
 
 
 
-int main() {
 
-    struct Initialise device1;                  // creates a new object device1
-
-    int k;
-    char device_id[100];
-
-    // loads the json in file in config global variable
-    
-    loadJsonConfig();
-
-    cout<<"Number of cameras available: \n";
-
-    // prints out all the active devices
-    
-    ListActiveCameras();
-    
-    cout<<"\nChoose from Devices:\n { 0 , 1 , 2 , 3 }"<<endl;
-    cin>>k;
-
-    if(k==0) strcpy(device_id,"device0");
-    else if(k==1) strcpy(device_id,"device1");
-    else if(k==2) strcpy(device_id,"device2");
-    else if(k==3) strcpy(device_id,"device3");
-    else {
-    printf("Error, Enter a valid number \n");
-    return -1;
-    }
-      
-    Value& DeviceID = config[device_id]["loc"];
-
-    strcpy(device1.loc,DeviceID.GetString());                   // copying the device id in device1.loc
-
-     /* Print the string value */
-    cout <<"Device ID = " << DeviceID.GetString() << std::endl;
-
-
-    // Read Camera settings from kernel
-
-    ReadCameraSettings(device1);
-    
-    // Captures frame and save it into memory
-   
-    CaptureFrametoMem(device1); 
-
-    
-    return 0;
-}
 
 
