@@ -1,5 +1,5 @@
 /**
-* @file shunyaVideoFunctions.h
+* @file shunyaVideoFunctions.cpp
 * @brief 
 * Contains all the functions for Camera Initialisation, load JSON config
 * and Capture Frame
@@ -18,9 +18,10 @@
  *#####################################################################
  */
 
-
 /* --- Standard Includes --- */
 
+
+#include "VideoFunctions.h"
 #include <fstream>
 #include <cstdlib>
 #include <string>
@@ -61,10 +62,11 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <linux/videodev2.h>
-
 #include <linux/videodev.h>
 #include <glob.h>
 #include <unistd.h>
+
+
 
 #define SI_CONFIG_FILE "config.json"
 #define JSON_MAX_READ_BUF_SIZE 65536
@@ -104,26 +106,25 @@ int8_t loadJsonConfig()
         FileReadStream frstream(fp, readBuffer, sizeof(readBuffer));
         /* Parse example.json and store it in `d` */
         config.ParseStream(frstream);
-        
         ParseResult ok = config.ParseStream(frstream);
 
         if (!ok) {
-            fprintf(stderr, "Error Reading JSON config file: JSON parse error: %s (%u)\n",
+            fprintf(stderr, "Error Reading JSON config file: JSON parse error: %s (%u)",
                     GetParseError_En(ok.Code()), ok.Offset());
         }
 
         ret = 0;
 
     } else {
-        fprintf(stderr,"Error Reading JSON config file: %s\n", strerror(errno));
+        fprintf(stderr,"Error Reading JSON config file: %s", strerror(errno));
     }
 
     /* Close the example.json file*/
     fclose(fp);
-
-    /* Return the 0 on success and -1 on failure */
     return ret;
 }
+
+
 
 /** 
  *  @brief List all the active cameras present

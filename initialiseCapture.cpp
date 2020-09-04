@@ -23,11 +23,11 @@
 /* --- Standard Includes --- */
 #include <iostream>
 #include <cstdlib>
-#include <string>
+#include <string.h>
 #include <errno.h>
 
 /* --- Project Includes --- */
-#include "shunyaVideoFunctions.h"
+#include "VideoFunctions.h"
 
 
 using namespace std;
@@ -59,7 +59,7 @@ int main() {
     int k;                                      // Integer to store the choice of device for the user
     char device_id[100];                        // char to store the device id
 
-    loadJsonConfig();                               // loads the json in file in config global variable
+    loadJsonConfig();
 
     cout<<"Number of cameras available: \n";
 
@@ -68,21 +68,17 @@ int main() {
     cout<<"\nChoose from Devices:\n { 0 , 1 , 2 , 3 }"<<endl;           // Print out the options for User
     cin>>k;                                                             // Get the value of k
 
-    if(k==0) strcpy(device_id,"device0");                               // Copey the device id according to the given input of k
-    else if(k==1) strcpy(device_id,"device1");
-    else if(k==2) strcpy(device_id,"device2");
-    else if(k==3) strcpy(device_id,"device3");
+    if(k==0) strcpy(device_id,"/dev/video0");                               // Copey the device id according to the given input of k
+    else if(k==1) strcpy(device_id,"/dev/video1");
+    else if(k==2) strcpy(device_id,"/dev/video2");
+    else if(k==3) strcpy(device_id,"/dev/video3");
     else {
     printf("Error, Enter a valid number \n");
     return -1;                                                      // if wrong input return -1 and print the error
     }
       
-    Value& DeviceID = config[device_id]["loc"];                  // load the device location from JSON file
 
-    strcpy(device1.loc,DeviceID.GetString());                   // copying the device id in device1.loc
-
-     /* Print the string value */
-    cout <<"Device ID = " << DeviceID.GetString() << endl;          // Print the device id to make sure
+    strcpy(device1.loc,device_id);                   // copying the device id in device1.loc
 
     ReadCameraSettings(device1);                                // Read Camera settings from kernel
    

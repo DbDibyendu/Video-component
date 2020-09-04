@@ -1,34 +1,17 @@
 {
   "device0": {
-    "loc":"/dev/video0",
-    "Width/Height": "1280/720",
-    "Pixel Format": "MJPG",
-    "Image Size": "1228800",
-    "FPS": "15.00",
-    "Colorspace": "sRGB"
+    "loc":"0"
+    
   },
   "device1": {
-    "loc":"/dev/video1",
-    "Width/Height": "1280/720",
-    "Pixel Format": "MJPG",
-    "Image Size": "1228800",
-    "FPS": "30.00",
-    "Colorspace": "sRGB"
+    "loc":"1"
+    
   },
   "device2": {
-    "loc":"/dev/video2",
-    "Width/Height": "1280/720",
-    "Pixel Format": "MJPG",
-    "Image Size": "1228800",
-    "FPS": "60.00",
-    "Colorspace": "sRGB"
+    "loc":"2"
   }, 
   "device3": {
-    "loc":"/dev/video3",
-    "Width/Height": "1280/720",
-    "Pixel Format": "MJPG",
-    "Image Size": "1228800",
-    "FPS": "60.00",
-    "Colorspace": "sRGB"
+    "loc":"3"
+    
   }       
 }
