@@ -27,6 +27,7 @@
 using namespace cv;
 using namespace std;
 
+
 /** 
  *  @brief 
  *  
@@ -35,9 +36,10 @@ using namespace std;
  *  @return 0 on success and -1 on failure
  */
 
-int main(int argc, char* argv[])
-{
-    //Open the default video camera
+
+int CaptureStreamtoMem(){
+
+     //Open the default video camera
     VideoCapture cap(0);
 
     // if not success, exit program
@@ -115,6 +117,24 @@ int main(int argc, char* argv[])
     destroyWindow(window_name);
 
     return 0;
+
+
+}
+
+/** 
+ *  @brief calling CaptureStreamtoMem
+ *  
+ *  Capture Stream and Saves it into Memory
+ *  
+ *  @return 0 on success and -1 on failure
+ */
+
+int main()
+{
+    CaptureStreamtoMem();
+    
+    return 0;
+   
 }
 
 
