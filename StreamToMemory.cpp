@@ -1,3 +1,27 @@
+/**
+* @file StreamToMemory.cpp
+* @brief 
+*
+* Captures Stream and save it to memory
+*
+* @author Dibyendu Biswas
+* @bug No bugs from my side
+*/
+
+/*
+ *#####################################################################
+ *  Initialization block
+ *  ---------------------
+ *  This block contains initialization code for this particular file.
+ *  It typically contains Includes, constants or global variables used
+ *  throughout the file.
+ *#####################################################################
+ */
+
+
+/* --- Standard Includes --- */
+
+
 //  https://www.opencv-srf.com/2018/01/save-images-and-videos-to-file.html
 
 #include <opencv2/opencv.hpp>
@@ -42,6 +66,7 @@ int main(int argc, char* argv[])
     {
         Mat frame;
         bool isSuccess = cap.read(frame); // read a new frame from the video camera
+        flip(frame, frame, 1);              // to see as in a mirror
 
         //Breaking the while loop if frames cannot be read from the camera
         if (isSuccess == false)
