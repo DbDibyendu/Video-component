@@ -21,14 +21,19 @@
 
 /* --- Standard Includes --- */
 
-
-//  https://www.opencv-srf.com/2018/01/save-images-and-videos-to-file.html
-
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
 using namespace cv;
 using namespace std;
+
+/** 
+ *  @brief 
+ *  
+ *  Capture Stream and Saves it into Memory
+ *  
+ *  @return 0 on success and -1 on failure
+ */
 
 int main(int argc, char* argv[])
 {
@@ -111,3 +116,6 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+
+//  https://www.opencv-srf.com/2018/01/save-images-and-videos-to-file.html
