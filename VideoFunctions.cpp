@@ -259,7 +259,7 @@ int CaptureFrametoMem(struct initCapture device){
 }
 
 /** 
- *  @brief  Take 20 frames at a time and save it into an array
+ *  @brief  Take 40 frames at a time and save it into an array
  *  
  *
  *  @return 0 on success and 1 on failure
