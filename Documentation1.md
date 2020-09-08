@@ -1,4 +1,4 @@
-# Documentation for code1.cpp
+# Documentation for initialiseFrametoMemory.cpp
 
 ### Psuedo codes and flowcharts for the functions
 
