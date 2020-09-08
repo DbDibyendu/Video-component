@@ -23,7 +23,7 @@
 /* --- Standard Includes --- */
 #include <iostream>
 #include <cstdlib>
-#include <string.h>
+#include <string>
 #include <errno.h>
 #include <fstream>
 
@@ -36,6 +36,10 @@
 #include "include/rapidjson/ostreamwrapper.h"
 #include "include/rapidjson/filereadstream.h"
 #include "include/rapidjson/error/en.h"
+#include "include/rapidjson/filereadstream.h"
+#include "include/rapidjson/filewritestream.h"
+#include "include/rapidjson/prettywriter.h"
+
 
 /* --- Project Includes --- */
 #include "VideoFunctions.h"
@@ -111,26 +115,20 @@ int main() {
 
     struct initCapture device1;                  // creates a new object device1
 
-    int k;                                      // Integer to store the choice of device for the user
     char device_id[100];                        // char to store the device id
 
     cout<<"Number of cameras available: \n";
 
     if(ListActiveCameras()==0){                                       //  Checks if device is present or not Prints and proceed on success else Abort
-    
-    cout<<"\nChoose from Devices:\n { 0 , 1 , 2 , 3 }"<<endl;           // Print out the options for User
-    cin>>k;                                                             // Get the value of k
 
-    if(k==0) strcpy(device_id,"/dev/video0");                               // Copey the device id according to the given input of k
-    else if(k==1) strcpy(device_id,"/dev/video1");
-    else if(k==2) strcpy(device_id,"/dev/video2");
-    else if(k==3) strcpy(device_id,"/dev/video3");
-    else {
-    printf("Error, Enter a valid number \n");
-    return -1;                                                      // if wrong input return -1 and print the error
-    }
+    loadJsonConfig();
+
+    Value& eStatus = config["device"];
+
+    strcpy(device_id,"/dev/video");
+
+    strcat(device_id, eStatus.GetString());
       
-
     strcpy(device1.loc,device_id);                   // copying the device id in device1.loc
 
     ReadCameraSettings(device1);                                // Read Camera settings from kernel

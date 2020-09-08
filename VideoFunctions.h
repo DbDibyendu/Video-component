@@ -72,8 +72,9 @@ int ListActiveCameras();
 
 struct initCapture{
     
+    double frame[1000000]={0};
     char loc[100];                                  // stores the device location
-    int fd;                                         
+    int fd;                                  
     v4l2_buffer bufferinfo;
     v4l2_buffer queryBuffer;
     v4l2_format imageFormat;
@@ -96,9 +97,16 @@ int ReadCameraSettings(struct initCapture device);
  *  @return 0 on success and 1 on failure
  */
 
- int CaptureFrametoMem(struct initCapture device);
+int CaptureFrametoMem(struct initCapture device);
 
+/** 
+ *  @brief  Take 20 frames at a time and save it into an array
+ *  
+ *
+ *  @return 0 on success and 1 on failure
+ */
 
+int StreamtoMem(struct initCapture device);
 
 #endif
 
