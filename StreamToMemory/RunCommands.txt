@@ -1,2 +1,0 @@
-For StreamToMemory
-1. g++ StreamToMemory.cpp -L/path/to/my/openCV/lib   -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_objdetect -lopencv_imgcodecs -lopencv_calib3d -lopencv_videoio -ltsanalyser
