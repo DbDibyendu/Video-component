@@ -259,7 +259,7 @@ int CaptureFrametoMem(struct initCapture device){
 }
 
 /** 
- *  @brief  Take 20 frames at a time and save it into an array
+ *  @brief  Take 40 frames at a time and save it into an array
  *  
  *
  *  @return 0 on success and 1 on failure
@@ -346,7 +346,7 @@ int StreamtoMem(struct initCapture device){
 
     double frame[100000000]={0};
 
-    for(i=0;i<20;i++){
+    for(i=0;i<40;i++){
 
 
 /***************************** Begin looping here *********************/
