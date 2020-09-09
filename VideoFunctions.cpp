@@ -55,7 +55,11 @@
 #include <glob.h>
 #include <unistd.h>
 
+/* --- OpenCV Includes --- */
+#include "opencv2/core.hpp"
+#include <opencv2/highgui.hpp>
 
+using namespace cv;
 using namespace std;
 
 /*
@@ -200,7 +204,7 @@ int CaptureFrametoMem(struct initCapture device){
     
     // 6. Get a frame
     // Create a new buffer type so the device knows whichbuffer we are talking about
-
+    
 
     memset(&device.bufferinfo, 0, sizeof(device.bufferinfo));
     device.bufferinfo.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -344,8 +348,6 @@ int StreamtoMem(struct initCapture device){
 
     int i;
 
-    double frame[100000000]={0};
-
     for(i=0;i<40;i++){
 
 
@@ -365,11 +367,13 @@ int StreamtoMem(struct initCapture device){
 
     cout << "Buffer has: " << (double)device.bufferinfo.bytesused / 1024
             << " KBytes of data" << endl;
-
-    // Save the frames in an array
-    frame[i]=(double)device.bufferinfo.bytesused;
+    
+    // Convert the buffer files into Mat format
 
     
+    CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)buffer);
+    device.frame[i] = cvDecodeImage(&cvmat, 1);
+
     }
 
     // end streaming
@@ -380,21 +384,11 @@ int StreamtoMem(struct initCapture device){
 
     close(device.fd);
 
-    for(i=0;i<10;i++){
+    // Save one image for demo
+    cvSaveImage("image.jpg", device.frame[0]);
 
-        cout<<frame[i]/1024<<endl;
-    }
 
-    // Write the data out to file
-
-    // Open the file
-    ofstream outFile;
-    outFile.open("webcam_output.jpeg", ios::binary| ios::app);
-    
-    // Write the data out to file
-    outFile.write(buffer, frame[0]);
-
-    // Close the file
-    outFile.close();
+    // https://jayrambhia.wordpress.com/2013/07/03/capture-images-using-v4l2-on-linux/    
 
 }
+
