@@ -73,7 +73,7 @@ int ListActiveCameras();
 
 struct initCapture{
     
-    IplImage* frame[10000];
+    IplImage* frame[10000];                     // OpenCV file format
     char loc[100];                                  // stores the device location
     int fd;                                  
     v4l2_buffer bufferinfo;
