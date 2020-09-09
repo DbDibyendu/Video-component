@@ -43,6 +43,8 @@
 
 /* --- Project Includes --- */
 #include "VideoFunctions.h"
+#include "opencv2/highgui.hpp"
+#include "opencv2/core.hpp"
 
 #define SI_CONFIG_FILE "config.json"
 #define JSON_MAX_READ_BUF_SIZE 65536

@@ -57,7 +57,7 @@
 
 /* --- OpenCV Includes --- */
 #include "opencv2/core.hpp"
-#include <opencv2/highgui.hpp>
+#include "opencv2/highgui.hpp"
 
 using namespace cv;
 using namespace std;
@@ -346,12 +346,12 @@ int StreamtoMem(struct initCapture device){
         return 1;
     }
 
-    int i;
+    int i;          // declare increament integer
+    
+/***************************** Begin looping here *********************/
 
     for(i=0;i<40;i++){
 
-
-/***************************** Begin looping here *********************/
     // Queue the buffer
     if(ioctl(device.fd, VIDIOC_QBUF, &device.bufferinfo) < 0){
         perror("Could not queue buffer, VIDIOC_QBUF");
@@ -369,7 +369,6 @@ int StreamtoMem(struct initCapture device){
             << " KBytes of data" << endl;
     
     // Convert the buffer files into Mat format
-
     
     CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)buffer);
     device.frame[i] = cvDecodeImage(&cvmat, 1);

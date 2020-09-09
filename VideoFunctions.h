@@ -48,7 +48,6 @@
 #include <glob.h>
 #include <unistd.h>
 #include "opencv2/core.hpp"
-#include <opencv2/highgui.hpp>
 
 /**
  * @brief Parse and store JSON document into global variable
