@@ -122,7 +122,7 @@ int main(){
 
     strcat(device_id, eStatus.GetString());                             // Adding the device number in the end of the string
       
-    strcpy(device1.loc,device_id);                   // copying the device id in device1.loc
+    strcpy(device1.loc,device_id);                                       // copying the device id in device1.loc
 
     int fd=initCamera(device1);                                 // Initialise Camera
 

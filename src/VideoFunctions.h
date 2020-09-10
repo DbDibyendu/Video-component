@@ -14,17 +14,6 @@
 #include <string>
 #include <errno.h>
 
-/* --- include/rapidjson Includes --- */
-
-#include "include/rapidjson/document.h"
-#include "include/rapidjson/writer.h"
-#include "include/rapidjson/istreamwrapper.h"
-#include "include/rapidjson/stringbuffer.h"
-#include "include/rapidjson/ostreamwrapper.h"
-#include "include/rapidjson/filereadstream.h"
-#include "include/rapidjson/error/en.h"
-
-
 /* --- Project Includes --- */
 
 #include <iostream>
@@ -54,15 +43,6 @@
 #include <unistd.h>
 #include "opencv2/core.hpp"
 
-/**
- * @brief Parse and store JSON document into global variable
- *
- * @return int8_t 0 on SUCCESS and -1 on FAILURE
- * 
- */
-
-int8_t loadJsonConfig();
-
 
 /** 
  *  @brief List all the active cameras present
@@ -88,7 +68,9 @@ struct initCapture{
 
 /** 
  *  @brief Initialises the Camera by opening the device location
- *  
+ * 
+ *  @param  device
+ * 
  *  @return -1 on failure and fd on success 
  */
 
@@ -97,7 +79,9 @@ int initCamera(struct initCapture device);
 
 /** 
  *  @brief Reads the respective Camera settings of a particular device
- *  
+ *  @param  fd 
+ *  @param  device
+ * 
  *  @return -1 on failure and 0 on success 
  */
 
@@ -105,8 +89,9 @@ int ReadCameraSettings(struct initCapture device, int fd);
 
 /** 
  *  @brief  Capture Image and save it into memory
+ *  @param  fd 
+ *  @param  device
  *  
- *
  *  @return 0 on success and 1 on failure
  */
 
@@ -114,8 +99,10 @@ int CaptureFrametoMem(struct initCapture device,int fd);
 
 /** 
  *  @brief  Take 10 frames at a time and save it into an array
+ *  @param  fd 
+ *  @param  device
  *  
- *
+ * 
  *  @return 0 on success and 1 on failure
  */
 
