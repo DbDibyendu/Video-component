@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.5)
 # Declare the Project version and the Language that the project is written in
 project(VideoComponent VERSION 1.0.0)
 
+
+#  point your compiler to build with C++14
+set(CMAKE_CXX_STANDARD 14)
+
 # Add library
 add_library(
     video STATIC
