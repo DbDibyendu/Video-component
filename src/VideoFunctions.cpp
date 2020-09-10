@@ -1,5 +1,5 @@
 /**
-* @file shunyaVideoFunctions.cpp
+* @file VideoFunctions.cpp
 * @brief 
 * Contains all the functions for Camera Initialisation, load JSON config
 * and Capture Frame
