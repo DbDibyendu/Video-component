@@ -2,7 +2,7 @@
 
 ### Psuedo codes and flowcharts for the functions
 
-##### 1. `StreamtoMem()`
+##### 1. `CaptureStreamtoMem()`
 
 This function Parse and store JSON document into global variable
 
