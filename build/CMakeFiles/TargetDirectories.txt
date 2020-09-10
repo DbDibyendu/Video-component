@@ -1,0 +1,5 @@
+/home/dibyendu/video-component/build/CMakeFiles/edit_cache.dir
+/home/dibyendu/video-component/build/CMakeFiles/video.dir
+/home/dibyendu/video-component/build/CMakeFiles/initialiseCapture.dir
+/home/dibyendu/video-component/build/CMakeFiles/StreamtoMemory.dir
+/home/dibyendu/video-component/build/CMakeFiles/rebuild_cache.dir

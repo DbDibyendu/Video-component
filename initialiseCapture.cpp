@@ -2,7 +2,7 @@
 * @file initialiseCapture.cpp
 * @brief 
 *
-*  Lists all the devices, let the user choose from them and print the settings of
+*  Lists all the devices, Load device number from JSON file and print the settings of
 *  selected Camera and then Initialise it and Capture Frame and save it into memory
 *
 * @author Dibyendu Biswas
@@ -42,7 +42,7 @@
 
 
 /* --- Project Includes --- */
-#include "VideoFunctions.h"
+#include "src/VideoFunctions.h"
 
 #define SI_CONFIG_FILE "config.json"
 #define JSON_MAX_READ_BUF_SIZE 65536
@@ -83,12 +83,6 @@ int8_t loadJsonConfig()
         FileReadStream frstream(fp, readBuffer, sizeof(readBuffer));
         /* Parse example.json and store it in `d` */
         config.ParseStream(frstream);
-        ParseResult ok = config.ParseStream(frstream);
-
-        if (!ok) {
-            fprintf(stderr, "Error Reading JSON config file: JSON parse error: %s (%u)",
-                    GetParseError_En(ok.Code()), ok.Offset());
-        }
 
         ret = 0;
 
@@ -104,7 +98,7 @@ int8_t loadJsonConfig()
 /** 
  *  @brief 
  *  
- *  Lists all the devices, let the user choose from them and print the settings of
+ *  Lists all the devices, loads device loc from JSON and print the settings of
  *  selected Camera and then Initialise it and Capture Frame and save it into memory
  *  
  *  @return 0 on success and -1 on failure
@@ -121,19 +115,21 @@ int main() {
 
     if(ListActiveCameras()==0){                                       //  Checks if device is present or not Prints and proceed on success else Abort
 
-    loadJsonConfig();
+    loadJsonConfig();                                                   // Loads the JSON file
 
-    Value& eStatus = config["device"];
+    Value& eStatus = config["device"];                                  // Get the device number from JSON file
 
-    strcpy(device_id,"/dev/video");
+    strcpy(device_id,"/dev/video");                     
 
-    strcat(device_id, eStatus.GetString());
+    strcat(device_id, eStatus.GetString());                             // copy the device number in the string
       
-    strcpy(device1.loc,device_id);                   // copying the device id in device1.loc
+    strcpy(device1.loc,device_id);                              // copying the device id in device1.loc
 
-    ReadCameraSettings(device1);                                // Read Camera settings from kernel
+    int fd= initCamera(device1);                             // Initialise Camera and opens it
+
+    ReadCameraSettings(device1,fd);                                // Read Camera settings from kernel
    
-    CaptureFrametoMem(device1);                         // Captures frame and save it into memory
+    CaptureFrametoMem(device1,fd);                         // Captures frame and save it into memory
 
     }
     else

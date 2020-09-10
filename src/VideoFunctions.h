@@ -1,3 +1,8 @@
+/**
+ * @file   	VideoFunctions.h
+ * @brief  	Includes all the function prototype
+ */
+
 
 /*! Include Guard */
 #ifndef CAMERA_H
@@ -39,7 +44,7 @@
 #include <string>
 #include <tsanalyser/tsanalyser.h>
 #include <assert.h>
-#include <getopt.h>             /* getopt_long() */
+#include <getopt.h>         
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/time.h>
@@ -58,12 +63,12 @@
 
 int8_t loadJsonConfig();
 
+
 /** 
  *  @brief List all the active cameras present
  *  
  *  @return -1 If device is not found and else 0 on Success
  */
-
 
 int ListActiveCameras();
 
@@ -72,14 +77,23 @@ int ListActiveCameras();
 
 struct initCapture{
     
-    IplImage* frame[10000];                     // OpenCV file format
-    char loc[100];                                  // stores the device location
-    int fd;                                  
-    v4l2_buffer bufferinfo;
-    v4l2_buffer queryBuffer;
-    v4l2_format imageFormat;
+    IplImage* frame[10000];                      // OpenCV file format
+    char loc[100];                               // stores the device location
+    char* buffer;
+    char ** array = (char **) malloc(sizeof(char*));            // for storing the buffers into a 2d pointer array
 
 };
+
+
+
+/** 
+ *  @brief Initialises the Camera by opening the device location
+ *  
+ *  @return -1 on failure and fd on success 
+ */
+
+int initCamera(struct initCapture device);
+
 
 /** 
  *  @brief Reads the respective Camera settings of a particular device
@@ -87,8 +101,7 @@ struct initCapture{
  *  @return -1 on failure and 0 on success 
  */
 
-int ReadCameraSettings(struct initCapture device);
-
+int ReadCameraSettings(struct initCapture device, int fd);
 
 /** 
  *  @brief  Capture Image and save it into memory
@@ -97,17 +110,20 @@ int ReadCameraSettings(struct initCapture device);
  *  @return 0 on success and 1 on failure
  */
 
-int CaptureFrametoMem(struct initCapture device);
+int CaptureFrametoMem(struct initCapture device,int fd);
 
 /** 
- *  @brief  Take 20 frames at a time and save it into an array
+ *  @brief  Take 10 frames at a time and save it into an array
  *  
  *
  *  @return 0 on success and 1 on failure
  */
 
-int StreamtoMem(struct initCapture device);
+int CaptureStreamtoMem(struct initCapture device, int fd);
 
+
+
+/* End of Include Guard */
 #endif
 
 
