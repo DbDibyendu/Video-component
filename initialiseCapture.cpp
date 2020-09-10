@@ -27,7 +27,7 @@
 #include <errno.h>
 #include <fstream>
 
-/* --- include/rapidjson Includes --- */
+/* --- rapidjson Includes --- */
 
 #include "include/rapidjson/document.h"
 #include "include/rapidjson/writer.h"
