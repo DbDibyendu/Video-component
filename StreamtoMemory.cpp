@@ -1,9 +1,7 @@
 /**
-* @file initialiseCapture.cpp
+* @file StreamtoMemory.cpp
 * @brief 
-*
-*  Lists all the devices, let the user choose from them and print the settings of
-*  selected Camera and then Initialise it and Capture Frame and save it into memory
+*   Captures to Stream of frames into Mat array
 *
 * @author Dibyendu Biswas
 * @bug No bugs from my side
@@ -99,8 +97,7 @@ int8_t loadJsonConfig()
 /** 
  *  @brief 
  *  
- *  Lists all the devices, let the user choose from them and print the settings of
- *  selected Camera and then Initialise it and Capture Frame and save it into memory
+ *  Captures to Stream of frames into Mat array
  *  
  *  @return 0 on success and -1 on failure
  */
