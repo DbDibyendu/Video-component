@@ -1,1 +1,2 @@
 1. g++ StreamtoMemory.cpp VideoFunctions.cpp -L/path/to/my/openCV/lib   -lopencv_core  -lopencv_highgui  -lopencv_imgcodecs 
+2. g++ initialiseCamera.cpp VideoFunctions.cpp -L/path/to/my/openCV/lib   -lopencv_core  -lopencv_highgui  -lopencv_imgcodecs 
