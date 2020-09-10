@@ -114,19 +114,19 @@ int main(){
 
     if(ListActiveCameras()==0){                                       //  Checks if device is present or not Prints and proceed on success else Abort
 
-    loadJsonConfig();
+    loadJsonConfig();                                                   // Loads the JSON document for the device number
 
-    Value& eStatus = config["device"];
+    Value& eStatus = config["device"];                                      // Gets the device number from it
 
-    strcpy(device_id,"/dev/video");
+    strcpy(device_id,"/dev/video");                                             
 
-    strcat(device_id, eStatus.GetString());
+    strcat(device_id, eStatus.GetString());                             // Adding the device number in the end of the string
       
     strcpy(device1.loc,device_id);                   // copying the device id in device1.loc
 
-    int fd=initCamera(device1);
+    int fd=initCamera(device1);                                 // Initialise Camera
 
-    CaptureStreamtoMem(device1,fd);
+    CaptureStreamtoMem(device1,fd);                             // call function to CaptureStreamtoMem
     
 
     }
