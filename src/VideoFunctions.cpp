@@ -21,7 +21,7 @@
 /* --- Standard Includes --- */
 
 
-#include "include/VideoFunctions.h"
+#include "VideoFunctions.h"
 #include <fstream>
 #include <cstdlib>
 #include <string>
@@ -249,6 +249,12 @@ int CaptureFrametoMem(struct initCapture device, int fd) {
     cout << "Buffer has: " << (double)bufferinfo.bytesused / 1024
          << " KBytes of data" << endl;
 
+
+    // Convert the buffer files into Mat format
+    CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)device.buffer);
+
+    // save them into OpenCV array file format i.e. Iplimage
+    device.frame[0] = cvDecodeImage(&cvmat, 1);
 
     // Write the data out to file
 
