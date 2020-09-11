@@ -1,6 +1,10 @@
 /**
 * @file StreamtoMemory.cpp
+<<<<<<< HEAD
 * @brief
+=======
+* @brief 
+>>>>>>> 66fd2a026c490df7828da5e78eb1f11eafa88714
 *   Captures to Stream of frames into Mat array
 *
 * @author Dibyendu Biswas
@@ -40,7 +44,11 @@
 
 
 /* --- Project Includes --- */
+<<<<<<< HEAD
 #include "VideoFunctions.h"
+=======
+#include "src/VideoFunctions.h"
+>>>>>>> 66fd2a026c490df7828da5e78eb1f11eafa88714
 
 #define SI_CONFIG_FILE "config.json"
 #define JSON_MAX_READ_BUF_SIZE 65536
@@ -52,7 +60,11 @@ using namespace std;
  *#####################################################################
  *  Process block
  *  -------------
+<<<<<<< HEAD
  *  Solve all your problems here
+=======
+ *  Solve all your problems here 
+>>>>>>> 66fd2a026c490df7828da5e78eb1f11eafa88714
  *#####################################################################
  */
 
@@ -65,7 +77,11 @@ static Document config;
  * @brief Parse and store JSON document into global variable
  *
  * @return int8_t 0 on SUCCESS and -1 on FAILURE
+<<<<<<< HEAD
  *
+=======
+ * 
+>>>>>>> 66fd2a026c490df7828da5e78eb1f11eafa88714
  */
 
 int8_t loadJsonConfig()
@@ -94,6 +110,7 @@ int8_t loadJsonConfig()
 }
 
 
+<<<<<<< HEAD
 /**
  *  @brief
  *
@@ -103,12 +120,24 @@ int8_t loadJsonConfig()
  */
 
 int main() {
+=======
+/** 
+ *  @brief 
+ *  
+ *  Captures to Stream of frames into Mat array
+ *  
+ *  @return 0 on success and -1 on failure
+ */
+
+int main(){
+>>>>>>> 66fd2a026c490df7828da5e78eb1f11eafa88714
     struct initCapture device1;                  // creates a new object device1
 
     char device_id[100];                        // char to store the device id
 
     cout<<"Number of cameras available: \n";
 
+<<<<<<< HEAD
     if(ListActiveCameras()==0) {                                      //  Checks if device is present or not Prints and proceed on success else Abort
 
         loadJsonConfig();                                                   // Loads the JSON document for the device number
@@ -125,6 +154,24 @@ int main() {
 
         CaptureStreamtoMem(device1,fd);                             // call function to CaptureStreamtoMem
 
+=======
+    if(ListActiveCameras()==0){                                       //  Checks if device is present or not Prints and proceed on success else Abort
+
+    loadJsonConfig();                                                   // Loads the JSON document for the device number
+
+    Value& eStatus = config["device"];                                      // Gets the device number from it
+
+    strcpy(device_id,"/dev/video");                                             
+
+    strcat(device_id, eStatus.GetString());                             // Adding the device number in the end of the string
+      
+    strcpy(device1.loc,device_id);                                       // copying the device id in device1.loc
+
+    int fd=initCamera(device1);                                 // Initialise Camera
+
+    CaptureStreamtoMem(device1,fd);                             // call function to CaptureStreamtoMem
+    
+>>>>>>> 66fd2a026c490df7828da5e78eb1f11eafa88714
 
     }
     else
@@ -134,5 +181,9 @@ int main() {
     }
 
     return 0;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 66fd2a026c490df7828da5e78eb1f11eafa88714
 }

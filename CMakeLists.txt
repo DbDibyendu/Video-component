@@ -22,5 +22,5 @@ add_executable(initialiseCapture initialiseCapture.cpp)
 add_executable(StreamtoMemory StreamtoMemory.cpp)
 
 # Link all the Header
-target_link_libraries( initialiseCapture PUBLIC video -lopencv_core  -lopencv_highgui  -lopencv_imgcodecs  ${OpenCV_LIBS} )
-target_link_libraries( StreamtoMemory PUBLIC video   -lopencv_core  -lopencv_highgui  -lopencv_imgcodecs  ${OpenCV_LIBS} )
+target_link_libraries( initialiseCapture PUBLIC video  ${OpenCV_LIBS} )
+target_link_libraries( StreamtoMemory PUBLIC video   ${OpenCV_LIBS} )
