@@ -31,7 +31,6 @@
 #include <string.h>
 #include <fstream>
 #include <string>
-#include <tsanalyser/tsanalyser.h>
 #include <assert.h>
 #include <getopt.h>
 #include <sys/stat.h>
@@ -69,7 +68,7 @@ struct initCapture {
 /**
  *  @brief Initialises the Camera by opening the device location
  *
- *  @param  device
+ *  @param  device the object
  *
  *  @return -1 on failure and fd on success
  */
@@ -79,8 +78,8 @@ int initCamera(struct initCapture device);
 
 /**
  *  @brief Reads the respective Camera settings of a particular device
- *  @param  fd
- *  @param  device
+ *  @param  fd integer Variable for opening camera
+ *  @param  device the object
  *
  *  @return -1 on failure and 0 on success
  */
@@ -89,8 +88,8 @@ int ReadCameraSettings(struct initCapture device, int fd);
 
 /**
  *  @brief  Capture Image and save it into memory
- *  @param  fd
- *  @param  device
+ *  @param  fd integer Variable for opening camera
+ *  @param  device the object
  *
  *  @return 0 on success and 1 on failure
  */
@@ -99,8 +98,8 @@ int CaptureFrametoMem(struct initCapture device,int fd);
 
 /**
  *  @brief  Take 10 frames at a time and save it into an array
- *  @param  fd
- *  @param  device
+ *  @param  fd integer Variable for opening camera
+ *  @param  device the object
  *
  *
  *  @return 0 on success and 1 on failure
