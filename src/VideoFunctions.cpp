@@ -20,7 +20,6 @@
 
 /* --- Standard Includes --- */
 
-
 #include "VideoFunctions.h"
 #include <fstream>
 #include <cstdlib>
@@ -58,8 +57,32 @@
 #include "opencv2/core.hpp"
 #include "opencv2/highgui.hpp"
 
+
+/* --- rapidjson Includes --- */
+
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/istreamwrapper.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/ostreamwrapper.h"
+#include "rapidjson/filereadstream.h"
+#include "rapidjson/error/en.h"
+#include "rapidjson/filereadstream.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/prettywriter.h"
+
+/* Defines for JSON file */
+
+#define SI_CONFIG_FILE "config.json"
+#define JSON_MAX_READ_BUF_SIZE 65536
+
+using namespace rapidjson;
 using namespace cv;
 using namespace std;
+
+/* Declare a JSON document. JSON document parsed will be stored in this variable */
+static Document config;
+
 
 /*
  *#####################################################################
@@ -92,6 +115,52 @@ int ListActiveCameras() {
     return 0;
 }
 
+
+/**
+ * @brief Parse and store JSON document into global variable
+ *
+ * @return int8_t 0 on SUCCESS and -1 on FAILURE
+ *
+ */
+
+int8_t loadJsonConfig(struct initCapture device, char* name)
+{
+
+    char device_id[100];                        // char to store the device id
+    
+    int8_t ret = -1;
+    /* Open the example.json file in read mode */
+    FILE *fp = fopen(SI_CONFIG_FILE, "rb");
+
+    if (fp != NULL) {
+        /* Declare read buffer */
+        char readBuffer[JSON_MAX_READ_BUF_SIZE];
+        /* Declare stream for reading the example stream */
+        FileReadStream frstream(fp, readBuffer, sizeof(readBuffer));
+        /* Parse example.json and store it in `d` */
+        config.ParseStream(frstream);
+
+        Value& eStatus = config[name];                                      // Gets the device number from it
+
+        strcpy(device_id,"/dev/video");
+
+        strcat(device_id, eStatus.GetString());                             // Adding the device number in the end of the string
+
+        strcpy(device.loc,device_id);                                       // copying the device id in device1.loc
+
+        ret = 0;
+
+    } else {
+        fprintf(stderr,"Error Reading JSON config file: %s \n", strerror(errno));
+        fclose(fp);
+        return ret;
+    }
+
+    /* Close the example.json file*/
+    fclose(fp);
+    return ret;
+}
+
 /**
  *  @brief Initialises the Camera by opening the device location
  *  @param  device the object
@@ -114,7 +183,7 @@ int initCamera(struct initCapture device) {
     if(ioctl(fd, VIDIOC_QUERYCAP, &capability) < 0) {
         // something went wrong... exit
         perror("Failed to get device capabilities, VIDIOC_QUERYCAP");
-        return 1;
+        return -1;
     }
 
     return fd;
@@ -210,9 +279,9 @@ int CaptureFrametoMem(struct initCapture device, int fd) {
     // use a pointer to point to the newly created buffer
     // mmap() will map the memory address of the device to
     // an address in memory
-    device.buffer = (char*)mmap(NULL, queryBuffer.length, PROT_READ | PROT_WRITE, MAP_SHARED,
+    char* buffer = (char*)mmap(NULL, queryBuffer.length, PROT_READ | PROT_WRITE, MAP_SHARED,
                                 fd,queryBuffer.m.offset);
-    memset(device.buffer, 0, queryBuffer.length);
+    memset(buffer, 0, queryBuffer.length);
 
     // 6. Get a frame
     // Create a new buffer type so the device knows whichbuffer we are talking about
@@ -250,7 +319,7 @@ int CaptureFrametoMem(struct initCapture device, int fd) {
 
 
     // Convert the buffer files into Mat format
-    CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)device.buffer);
+    CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)buffer);
 
     // save them into OpenCV array file format i.e. Iplimage
     device.frame[0] = cvDecodeImage(&cvmat, 1);
@@ -262,7 +331,7 @@ int CaptureFrametoMem(struct initCapture device, int fd) {
     outFile.open("webcam_output.jpeg", ios::binary| ios::app);
 
     // Write the data out to file
-    outFile.write(device.buffer, (double)bufferinfo.bytesused);
+    outFile.write(buffer, (double)bufferinfo.bytesused);
 
     // Close the file
     outFile.close();
@@ -328,9 +397,9 @@ int CaptureStreamtoMem(struct initCapture device,int fd) {
     // use a pointer to point to the newly created buffer
     // mmap() will map the memory address of the device to
     // an address in memory
-    device.buffer = (char*)mmap(NULL, queryBuffer.length, PROT_READ | PROT_WRITE, MAP_SHARED,
+    char *buffer = (char*)mmap(NULL, queryBuffer.length, PROT_READ | PROT_WRITE, MAP_SHARED,
                                 fd,queryBuffer.m.offset);
-    memset(device.buffer, 0, queryBuffer.length);
+    memset(buffer, 0, queryBuffer.length);
 
     // 6. Get a frame
     // Create a new buffer type so the device knows whichbuffer we are talking about
@@ -383,7 +452,7 @@ int CaptureStreamtoMem(struct initCapture device,int fd) {
             exit(0);
         }
 
-        device.array[i] = device.buffer;                                // Store the buffers into an 2d pointer array
+        device.array[i] = buffer;                                // Store the buffers into an 2d pointer array
 
 
         // Convert the buffer files into Mat format
