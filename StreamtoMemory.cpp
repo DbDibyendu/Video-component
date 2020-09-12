@@ -23,29 +23,9 @@
 #include <cstdlib>
 #include <string>
 #include <errno.h>
-#include <fstream>
-
-/* --- rapidjson Includes --- */
-
-#include "rapidjson/document.h"
-#include "rapidjson/writer.h"
-#include "rapidjson/istreamwrapper.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/ostreamwrapper.h"
-#include "rapidjson/filereadstream.h"
-#include "rapidjson/error/en.h"
-#include "rapidjson/filereadstream.h"
-#include "rapidjson/filewritestream.h"
-#include "rapidjson/prettywriter.h"
-
-
-/* --- Project Includes --- */
 #include "VideoFunctions.h"
 
-#define SI_CONFIG_FILE "config.json"
-#define JSON_MAX_READ_BUF_SIZE 65536
 
-using namespace rapidjson;
 using namespace std;
 
 /*
@@ -57,42 +37,6 @@ using namespace std;
  */
 
 
-/* Declare a JSON document. JSON document parsed will be stored in this variable */
-static Document config;
-
-/**
- * @brief Parse and store JSON document into global variable
- *
- * @return int8_t 0 on SUCCESS and -1 on FAILURE
- *
- */
-
-int8_t loadJsonConfig()
-{
-    int8_t ret = -1;
-    /* Open the example.json file in read mode */
-    FILE *fp = fopen(SI_CONFIG_FILE, "rb");
-
-    if (fp != NULL) {
-        /* Declare read buffer */
-        char readBuffer[JSON_MAX_READ_BUF_SIZE];
-        /* Declare stream for reading the example stream */
-        FileReadStream frstream(fp, readBuffer, sizeof(readBuffer));
-        /* Parse example.json and store it in `d` */
-        config.ParseStream(frstream);
-
-        ret = 0;
-
-    } else {
-        fprintf(stderr,"Error Reading JSON config file: %s", strerror(errno));
-    }
-
-    /* Close the example.json file*/
-    fclose(fp);
-    return ret;
-}
-
-
 /**
  *  @brief
  *
@@ -102,28 +46,19 @@ int8_t loadJsonConfig()
  */
 
 int main() {
+    
     struct initCapture device1;                  // creates a new object device1
-
-    char device_id[100];                        // char to store the device id
 
     cout<<"Number of cameras available: \n";
 
     if(ListActiveCameras()==0) {                                      //  Checks if device is present or not Prints and proceed on success else Abort
 
-        loadJsonConfig();                                                   // Loads the JSON document for the device number
-
-        Value& eStatus = config["device"];                                      // Gets the device number from it
-
-        strcpy(device_id,"/dev/video");
-
-        strcat(device_id, eStatus.GetString());                             // Adding the device number in the end of the string
-
-        strcpy(device1.loc,device_id);                                       // copying the device id in device1.loc
+        loadJsonConfig(device1,"device");                                             // Loads the JSON document for the device number
 
         int fd=initCamera(device1);                                 // Initialise Camera
 
         CaptureStreamtoMem(device1,fd);                             // call function to CaptureStreamtoMem
-
+        
 
     }
     else
