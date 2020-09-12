@@ -8,38 +8,21 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <stdint.h>
-#include <fstream>
-#include <cstdlib>
-#include <string>
-#include <errno.h>
+/*! CPP guard */
+#ifdef camera
+extern "C" {
+#endif
+
+
 
 /* --- Project Includes --- */
 
+#include <stdint.h>
+#include <cstdlib>
+#include <string>
+#include <errno.h>
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
-#include <linux/ioctl.h>
-#include <linux/types.h>
-#include <linux/v4l2-common.h>
-#include <linux/v4l2-controls.h>
-#include <linux/videodev2.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <string.h>
-#include <fstream>
-#include <string>
-#include <assert.h>
-#include <getopt.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <linux/videodev2.h>
-#include <linux/videodev.h>
-#include <glob.h>
-#include <unistd.h>
 #include "opencv2/core.hpp"
 
 
@@ -49,7 +32,7 @@
  *  @return -1 If device is not found and else 0 on Success
  */
 
-int ListActiveCameras();
+extern int ListActiveCameras();
 
 
 // creating a structure for capturing image and saving it into file
@@ -57,13 +40,21 @@ int ListActiveCameras();
 struct initCapture {
 
     IplImage* frame[10000];                      // OpenCV file format
-    char loc[100];                               // stores the device location
-    char* buffer;
+    char loc[100];                               //  Char Member which stores the device location
     char ** array = (char **) malloc(sizeof(char*));            // for storing the buffers into a 2d pointer array
 
 };
 
 
+
+/**
+ * @brief Parse and store JSON document into global variable
+ *
+ * @return int8_t 0 on SUCCESS and -1 on FAILURE
+ *
+ */
+
+extern int8_t loadJsonConfig(struct initCapture device, char* name);
 
 /**
  *  @brief Initialises the Camera by opening the device location
@@ -73,7 +64,7 @@ struct initCapture {
  *  @return -1 on failure and fd on success
  */
 
-int initCamera(struct initCapture device);
+extern int initCamera(struct initCapture device);
 
 
 /**
@@ -84,7 +75,7 @@ int initCamera(struct initCapture device);
  *  @return -1 on failure and 0 on success
  */
 
-int ReadCameraSettings(struct initCapture device, int fd);
+extern int ReadCameraSettings(struct initCapture device, int fd);
 
 /**
  *  @brief  Capture Image and save it into memory
@@ -94,7 +85,7 @@ int ReadCameraSettings(struct initCapture device, int fd);
  *  @return 0 on success and 1 on failure
  */
 
-int CaptureFrametoMem(struct initCapture device,int fd);
+extern int CaptureFrametoMem(struct initCapture device,int fd);
 
 /**
  *  @brief  Take 10 frames at a time and save it into an array
@@ -105,9 +96,11 @@ int CaptureFrametoMem(struct initCapture device,int fd);
  *  @return 0 on success and 1 on failure
  */
 
-int CaptureStreamtoMem(struct initCapture device, int fd);
+extern int CaptureStreamtoMem(struct initCapture device, int fd);
 
-
+#ifdef camera
+}
+#endif /* End of CPP guard */
 
 /* End of Include Guard */
 #endif
